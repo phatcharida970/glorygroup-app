@@ -30,3 +30,11 @@ textarea,
 button {
   font-size: 16px;
 }
+
+/* snappier touch: kill the grey tap-highlight + 300ms delay, allow instant taps */
+a,
+button,
+[role='button'] {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
