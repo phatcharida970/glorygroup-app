@@ -40,6 +40,9 @@ pnpm-debug.log*
 # brainstorming visual companion (local only)
 /.superpowers/
 
+# claude code local state
+.claude/scheduled_tasks.lock
+
 # IDE
 .idea/
 .vscode/*
