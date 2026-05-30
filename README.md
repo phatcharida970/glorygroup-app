@@ -1,36 +1,23 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DesignDeck
 
-## Getting Started
+ผู้ช่วยจดลูกค้า & เทียบราคาดีลเลอร์ สำหรับนักออกแบบภายใน (Next.js + Supabase, PWA)
 
-First, run the development server:
+## ตั้งค่า Supabase (ทำครั้งเดียว)
+1. สมัคร https://supabase.com → New project (เลือก region Singapore)
+2. ไปที่ **SQL Editor** → วางเนื้อหาไฟล์ `supabase/migrations/0001_init.sql` → Run
+3. ไปที่ **Authentication → Providers** → เปิด **Google** (ใส่ Client ID/Secret จาก Google Cloud Console; Authorized redirect: `https://<project>.supabase.co/auth/v1/callback`) — หรือใช้ Email/Password เฉยๆ ก็ได้
+4. **Authentication → URL Configuration** → ใส่ Site URL = โดเมน Vercel ของคุณ (และ http://localhost:3000 ตอน dev)
+5. คัดลอก **Project URL** และ **anon key** (Settings → API)
 
+## รันบนเครื่อง
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local   # ใส่ค่า URL + anon key
+npm install
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deploy ขึ้น Vercel
+1. push repo ขึ้น GitHub
+2. https://vercel.com → New Project → import repo
+3. ใส่ Environment Variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+4. Deploy → เปิดโดเมนที่ได้ → ติดตั้งเป็นแอป (Add to Home Screen)
