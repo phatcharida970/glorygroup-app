@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 
-export async function getAttachments(entityType: 'customer' | 'dealer', entityId: string) {
+export async function getAttachments(entityType: 'customer' | 'dealer' | 'project_item', entityId: string) {
   const supabase = await createClient()
   const { data } = await supabase.from('attachments').select('*')
     .eq('entity_type', entityType).eq('entity_id', entityId).order('sort_order')

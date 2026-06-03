@@ -5,7 +5,7 @@ import { recordAttachment } from '@/actions/attachments'
 import { useRouter } from 'next/navigation'
 
 export function ImageUploader({ entityType, entityId }: {
-  entityType: 'customer' | 'dealer'; entityId: string
+  entityType: 'customer' | 'dealer' | 'project_item'; entityId: string
 }) {
   const supabase = createClient(); const router = useRouter()
   const [busy, setBusy] = useState(false)

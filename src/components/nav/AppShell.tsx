@@ -5,6 +5,8 @@ import { usePathname } from 'next/navigation'
 const items = [
   { href: '/', label: 'หน้าแรก', icon: '🏠' },
   { href: '/customers', label: 'ลูกค้า', icon: '👤' },
+  { href: '/jobs', label: 'งาน', icon: '📋' },
+  { href: '/summary', label: 'บัญชี', icon: '📊' },
   { href: '/dealers', label: 'ดีลเลอร์', icon: '🏪' },
   { href: '/compare', label: 'เทียบราคา', icon: '🏷️' },
 ]
@@ -63,7 +65,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <main className="flex-1 pb-20 md:pb-6 max-w-2xl mx-auto w-full p-4">{children}</main>
 
       {/* Bottom nav (mobile) */}
-      <nav className="md:hidden fixed bottom-0 inset-x-0 border-t bg-white dark:bg-zinc-900 grid grid-cols-4 [padding-bottom:env(safe-area-inset-bottom)]">
+      <nav className="md:hidden fixed bottom-0 inset-x-0 border-t bg-white dark:bg-zinc-900 grid grid-cols-6 [padding-bottom:env(safe-area-inset-bottom)]">
         {items.map((it) => {
           const isActive = active(it.href)
           return (

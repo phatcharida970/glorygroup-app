@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getAttachments } from '@/lib/attachments'
 import { ImageUploader } from '@/components/ImageUploader'
 import { deleteCustomer } from '@/actions/customers'
+import { BackButton } from '@/components/ui/BackButton'
 
 export default async function CustomerDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -18,6 +19,7 @@ export default async function CustomerDetail({ params }: { params: Promise<{ id:
 
   return (
     <div className="space-y-5">
+      <BackButton href="/customers" />
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold">{c.name}</h1>
         <Link href={`/customers/${id}/edit`} className="text-sm underline">แก้ไข</Link>
