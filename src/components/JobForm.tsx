@@ -156,7 +156,11 @@ export function JobForm({ action, submitLabel = 'บันทึก', customers,
     ))
   }, [])
 
-  const addItem = () => setItems(p => [...p, blankItem(crypto.randomUUID())])
+  const newItemRef = useRef<HTMLDivElement>(null)
+  const addItem = () => {
+    setItems(p => [...p, blankItem(crypto.randomUUID())])
+    setTimeout(() => newItemRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50)
+  }
   const removeItem = (localId: string) => setItems(p => p.filter(it => it.localId !== localId))
   const updateItem = (localId: string, field: keyof Omit<LineItem, 'localId'>, val: string) =>
     setItems(p => p.map(it => it.localId === localId ? { ...it, [field]: val } : it))
@@ -232,7 +236,7 @@ export function JobForm({ action, submitLabel = 'บันทึก', customers,
         </div>
         <div className="space-y-3">
           {items.map((it, idx) => (
-            <div key={it.localId} className="rounded-xl border p-3 space-y-2 bg-zinc-50 dark:bg-zinc-800">
+            <div key={it.localId} ref={idx === items.length - 1 ? newItemRef : undefined} className="rounded-xl border p-3 space-y-2 bg-zinc-50 dark:bg-zinc-800">
               {/* ชื่อรายการ */}
               <div className="flex items-center gap-2">
                 <span className="text-xs opacity-50 w-5 text-center">{idx + 1}</span>
