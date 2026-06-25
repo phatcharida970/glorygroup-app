@@ -97,7 +97,7 @@ function CustomerCombobox({ customers, defaultName, defaultId }: {
         />
         {query && (
           <button type="button" onClick={() => { setQuery(''); setSelectedId('') }}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600">×</button>
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 cursor-pointer">×</button>
         )}
       </div>
       {query.trim() && (
@@ -110,7 +110,7 @@ function CustomerCombobox({ customers, defaultName, defaultId }: {
           {filtered.map(c => (
             <li key={c.id}>
               <button type="button" onMouseDown={() => { setQuery(c.name); setSelectedId(c.id); setOpen(false) }}
-                className="w-full text-left px-4 py-2.5 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800">
+                className="w-full text-left px-4 py-2.5 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer">
                 {c.name}
               </button>
             </li>

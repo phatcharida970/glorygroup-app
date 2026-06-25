@@ -46,7 +46,7 @@ export default async function JobDetailPage({ params }: { params: Promise<{ id: 
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold">แก้ไขงาน</h1>
           <form action={deleteJob.bind(null, id)}>
-            <button className="text-sm text-red-500 underline">ลบงาน</button>
+            <button className="text-sm text-red-500 underline cursor-pointer">ลบงาน</button>
           </form>
         </div>
 
