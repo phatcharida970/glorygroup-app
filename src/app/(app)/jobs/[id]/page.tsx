@@ -26,11 +26,12 @@ export default async function JobDetailPage({ params }: { params: Promise<{ id: 
     if (!project) notFound()
 
     // โหลดรูปบิลทุก item
-    const itemImages: Record<string, { id: string; url: string }[]> = {}
+    const itemImages: Record<string, { id: string; url: string; storagePath: string }[]> = {}
     await Promise.all(
       (items ?? []).map(async it => {
         try {
-          itemImages[it.id] = await getAttachments('project_item', it.id)
+          const rows = await getAttachments('project_item', it.id)
+          itemImages[it.id] = rows.map(r => ({ id: r.id, url: r.url, storagePath: r.storage_path }))
         } catch {
           itemImages[it.id] = []
         }

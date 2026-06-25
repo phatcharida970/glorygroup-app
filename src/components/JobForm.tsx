@@ -50,7 +50,7 @@ interface Props {
       expense_type?: string | null
     }[]
   }
-  itemImages?: Record<string, { id: string; url: string }[]>
+  itemImages?: Record<string, { id: string; url: string; storagePath?: string }[]>
 }
 
 let _uid = 0
@@ -143,6 +143,7 @@ export function JobForm({ action, submitLabel = 'บันทึก', customers,
   )
   const [pending, startTransition] = useTransition()
   const [errMsg, setErrMsg] = useState('')
+  const [saved, setSaved] = useState(false)
   const formRef = useRef<HTMLFormElement>(null)
 
   const totalCost = items.reduce((s, it) => s + (parseFloat(it.amount) || 0), 0)
@@ -197,10 +198,15 @@ export function JobForm({ action, submitLabel = 'บันทึก', customers,
     startTransition(async () => {
       try {
         const result = await action(fd)
-        if (result && 'error' in result) setErrMsg(result.error)
+        if (result && 'error' in result) {
+          setErrMsg(result.error)
+        } else {
+          setSaved(true)
+          setTimeout(() => window.location.reload(), 1500)
+        }
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : String(err)
-        if (msg.includes('REDIRECT')) throw err // ให้ Next.js จัดการ redirect เอง
+        if (msg.includes('REDIRECT')) throw err
         setErrMsg(msg || 'เกิดข้อผิดพลาด กรุณาลองใหม่')
       }
     })
@@ -239,7 +245,7 @@ export function JobForm({ action, submitLabel = 'บันทึก', customers,
       <div>
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-medium">รายการค่าใช้จ่าย</span>
-          <button type="button" onClick={addItem} className="text-sm text-indigo-600 underline">➕ เพิ่มรายการ</button>
+          <button type="button" onClick={addItem} className="text-sm text-indigo-600 underline cursor-pointer">➕ เพิ่มรายการ</button>
         </div>
         <div className="space-y-3">
           {items.map((it, idx) => (
@@ -251,7 +257,7 @@ export function JobForm({ action, submitLabel = 'บันทึก', customers,
                   className="flex-1 rounded-lg border px-3 py-2 text-sm"
                   placeholder="ชื่อรายการ เช่น โซฟา, กระเบื้อง" />
                 <button type="button" onClick={() => removeItem(it.localId)}
-                  className="text-red-500 text-lg leading-none px-1">×</button>
+                  className="text-red-500 text-lg leading-none px-1 cursor-pointer">×</button>
               </div>
               {/* ราคา + ดีลเลอร์ */}
               <div className="flex gap-2 pl-7">
@@ -270,7 +276,7 @@ export function JobForm({ action, submitLabel = 'บันทึก', customers,
                   {([['material','🧱 ค่าของ','bg-blue-600 text-white border-blue-600'],['labor','🔨 ค่าแรง','bg-rose-600 text-white border-rose-600']] as [string,string,string][]).map(([v,label,ac]) => (
                     <button key={v} type="button"
                       onClick={() => updateItem(it.localId, 'expense_type', it.expense_type === v ? '' : v)}
-                      className={`flex-1 py-2 rounded-lg border text-sm font-medium transition-colors ${it.expense_type === v ? ac : 'border-zinc-200 opacity-60 hover:opacity-100'}`}>
+                      className={`flex-1 py-2 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${it.expense_type === v ? ac : 'border-zinc-200 opacity-60 hover:opacity-100'}`}>
                       {label}
                     </button>
                   ))}
@@ -283,7 +289,7 @@ export function JobForm({ action, submitLabel = 'บันทึก', customers,
                   {([['', 'วิธีจ่าย'], ['cash', '💵 เงินสด'], ['transfer', '🏦 โอน']] as [string,string][]).map(([v, label]) => (
                     <button key={v} type="button"
                       onClick={() => updateItem(it.localId, 'payment_type', v)}
-                      className={`flex-1 py-2 rounded-lg border text-sm font-medium transition-colors ${
+                      className={`flex-1 py-2 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${
                         it.payment_type === v
                           ? 'bg-indigo-600 text-white border-indigo-600'
                           : 'border-zinc-200 opacity-60 hover:opacity-100'
@@ -308,7 +314,7 @@ export function JobForm({ action, submitLabel = 'บันทึก', customers,
                   ] as [string,string,string][]).map(([v, label, activeClass]) => (
                     <button key={v} type="button"
                       onClick={() => updateItem(it.localId, 'payment_status', it.payment_status === v ? '' : v)}
-                      className={`px-3 py-2 rounded-lg border text-sm font-medium transition-colors ${
+                      className={`px-3 py-2 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${
                         it.payment_status === v ? activeClass : 'border-zinc-200 opacity-60 hover:opacity-100'
                       }`}
                     >{label}</button>
@@ -377,8 +383,14 @@ export function JobForm({ action, submitLabel = 'บันทึก', customers,
         </div>
       )}
 
-      <button type="submit" disabled={pending}
-        className="w-full rounded-xl bg-indigo-600 text-white py-3 font-medium disabled:opacity-60">
+      {saved && (
+        <div className="rounded-xl bg-green-50 border border-green-300 px-4 py-3 text-sm text-green-700 text-center font-medium animate-pulse">
+          ✅ บันทึกเรียบร้อยแล้ว กำลังรีเฟรช...
+        </div>
+      )}
+
+      <button type="submit" disabled={pending || saved}
+        className="w-full rounded-xl bg-indigo-600 text-white py-3 font-medium disabled:opacity-60 cursor-pointer">
         {pending ? 'กำลังบันทึก...' : submitLabel}
       </button>
     </form>
