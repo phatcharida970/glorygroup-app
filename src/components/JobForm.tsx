@@ -157,10 +157,17 @@ export function JobForm({ action, submitLabel = 'บันทึก', customers,
   }, [])
 
   const newItemRef = useRef<HTMLDivElement>(null)
+  const shouldScrollRef = useRef(false)
   const addItem = () => {
+    shouldScrollRef.current = true
     setItems(p => [...p, blankItem(crypto.randomUUID())])
-    setTimeout(() => newItemRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50)
   }
+  useEffect(() => {
+    if (shouldScrollRef.current) {
+      shouldScrollRef.current = false
+      newItemRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
+  })
   const removeItem = (localId: string) => setItems(p => p.filter(it => it.localId !== localId))
   const updateItem = (localId: string, field: keyof Omit<LineItem, 'localId'>, val: string) =>
     setItems(p => p.map(it => it.localId === localId ? { ...it, [field]: val } : it))
